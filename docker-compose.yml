@@ -1,0 +1,29 @@
+version: "3"
+services:
+  app:
+    container_name: "${APP_NAME}-api"
+    restart: always
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/app/docker-adonis
+      # - /usr/app/docker-adonis/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - HOST=0.0.0.0
+  db:
+    container_name: "${APP_NAME}-db"
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5428:5432"
+    volumes:
+      - $PWD/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
